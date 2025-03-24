@@ -129,10 +129,13 @@
   <ItemGroup>
     <ClInclude Include="book.h" />
     <ClInclude Include="customer.h" />
-    <ClInclude Include="management.h" />
+    <ClInclude Include="bookManagement.h" />
+    <ClInclude Include="customerManagement.h" />
+    <ClInclude Include="invoiceManagement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="doan.cpp" />
+    <ClCompile Include="invoice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
