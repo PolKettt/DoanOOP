@@ -12,17 +12,16 @@ public:
 		phone = "unknow";
 	}
 	customer(string customerName, string customerAddress, string customerPhone) {
-		ID = customerID;
 		name = customerName;
 		address = customerAddress;
 		phone = customerPhone;
 	}
-	void setID(string customerID) {
+	/*void setID(string customerID) {
 		ID = customerID;
 	}
 	string getID() {
 		return ID;
-	}
+	}*/
 	void setName(string customerName) {
 		name = customerName;
 	}

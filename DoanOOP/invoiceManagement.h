@@ -9,11 +9,12 @@
 using namespace std;
 class invoiceManagement {
 private:
-	vector<invoice> invoiceList; 
+	vector<invoice> invoiceList;
 	customerManagement customerMgr;
 public:
 	void invoiceExport() {
 		cout << "thong tin hoa don" << endl;
-		customerMgr.addCustomer();	
+		customerMgr.addCustomer();
 
+	}
 };
