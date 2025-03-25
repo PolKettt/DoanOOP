@@ -17,4 +17,19 @@ public:
 		customerMgr.addCustomer();
 
 	}
+	void invoiceImport() {
+		customerMgr.addCustomer();
+
+		string ID;
+		int day, month, year;
+		cout << "nhap ngay:";
+		cin >> day;
+		cout << "nhap thang:";
+		cin >> month;
+		cout << "nhap nam:";
+		cin >> year;
+		invoice newInvoice(ID, day, month, year);
+		invoiceList.push_back(newInvoice);
+
+	}
 };

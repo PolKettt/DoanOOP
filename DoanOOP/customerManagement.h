@@ -23,7 +23,7 @@ public:
 			}
 		}
 		cout << "nhap dia chi khach hang";
-		getline(cin, customerAddress);		
+		getline(cin, customerAddress);
 		customer newCustomer(customerName, customerAddress, customerPhone);
 		infoCustomer(newCustomer);
 		customerList.push_back(newCustomer);
