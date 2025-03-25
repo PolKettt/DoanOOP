@@ -13,6 +13,7 @@ private:
 	customerManagement customerMgr;
 public:
 	void invoiceExport() {
-		customerMgr.addCustomer();
-	}
+		cout << "thong tin hoa don" << endl;
+		customerMgr.addCustomer();	
+
 };

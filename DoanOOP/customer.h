@@ -11,7 +11,7 @@ public:
 		address = "unknow";
 		phone = "unknow";
 	}
-	customer(string customerID, string customerName, string customerAddress, string customerPhone) {
+	customer(string customerName, string customerAddress, string customerPhone) {
 		ID = customerID;
 		name = customerName;
 		address = customerAddress;
