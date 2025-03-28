@@ -1,126 +1,108 @@
 #include <iostream>
-#include <vector>
-#include "book.h"
 #include "book_functions.h"
-
-using namespace std;
-
-
-void searchBooks(vector<book>& bookList) {
-    int searchChoice;
-    string searchId, searchName, searchAuthor, searchGenre;
-    int minPrice, maxPrice;
-
-    cout << "\n===== TIM KIEM SACH =====" << endl;
-    cout << "1. Tim sach theo ma" << endl;
-    cout << "2. Tim sach theo ten" << endl;
-    cout << "3. Tim sach theo tac gia" << endl;
-    cout << "4. Tim sach theo the loai" << endl;
-    cout << "5. Tim sach theo khoang gia" << endl;
-    cout << "0. Quay lai" << endl;
-    cout << "Nhap lua chon: ";
-    cin >> searchChoice;
-
-    switch (searchChoice) {
-        case 1:
-            cout << "Nhap ma sach can tim: ";
-            cin >> searchId;
-            {
-                book* result = findBookById(bookList, searchId);
-                if (result != NULL) {
-                    cout << "\n===== KET QUA TIM KIEM =====" << endl;
-                    result->displayBook();
-                } else {
-                    cout << "Khong tim thay sach co ma " << searchId << endl;
-                }
-            }
-            break;
-
-        case 2:
-            cout << "Nhap ten sach can tim: ";
-            cin.ignore();  
-            getline(cin, searchName);
-            {
-                vector<book*> results = findBooksByName(bookList, searchName);
-                displayBookPtrs(results);
-            }
-            break;
-
-        case 3:
-            cout << "Nhap ten tac gia can tim: ";
-            cin.ignore();
-            getline(cin, searchAuthor);
-            {
-                vector<book*> results = findBooksByAuthor(bookList, searchAuthor);
-                displayBookPtrs(results);
-            }
-            break;
-
-        case 4:
-            cout << "Nhap the loai can tim: ";
-            cin.ignore();
-            getline(cin, searchGenre);
-            {
-                vector<book*> results = findBooksByGenre(bookList, searchGenre);
-                displayBookPtrs(results);
-            }
-            break;
-
-        case 5:
-            cout << "Nhap gia thap nhat: ";
-            cin >> minPrice;
-            cout << "Nhap gia cao nhat: ";
-            cin >> maxPrice;
-            {
-                vector<book*> results = findBooksByPriceRange(bookList, minPrice, maxPrice);
-                displayBookPtrs(results);
-            }
-            break;
-
-        case 0:
-            cout << "Quay lai!" << endl;
-            break;
-
-        default:
-            cout << "Lua chon khong hop le!" << endl;
-            break;
-    }
-}
-
+#include <limits>
 int main() {
-    vector<book> bookList;
-    int choice, n;
+    std::vector<book> bookList;
+    const char* filename = "books.txt";
+    loadBooksFromFile(bookList, filename);
 
+    int choice;
     do {
-        cout << "\n===== QUAN LY SACH =====" << endl;
-        cout << "1. Nhap danh sach sach" << endl;
-        cout << "2. Hien thi danh sach sach" << endl;
-        cout << "3. Tim sach" << endl;
-        cout << "0. Thoat" << endl;
-        cout << "Nhap lua chon: ";
-        cin >> choice;
-
+        std::cout << "\n===== QUAN LY SACH =====" << std::endl;
+        std::cout << "1. Nhap danh sach sach (luu vao file)" << std::endl;
+        std::cout << "2. Hien thi danh sach sach" << std::endl;
+        std::cout << "3. Tim sach" << std::endl;
+        std::cout << "0. Thoat" << std::endl;
+        std::cout << "Nhap lua chon: ";
+        std::cin >> choice;
+		if (std::cin.fail()) { 
+            std::cout << "Loi: Lua chon phai la so nguyen! Vui long nhap lai.\n";
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            continue;
+        }
         switch (choice) {
-            case 1:
-                cout << "Nhap so luong sach can them: ";
-                cin >> n;
-                inputBooks(bookList, n);
-                break;
+        	case 1:
+            int n;
+//            while (true) {
+//                    std::cout << "Nhap so luong sach can them: ";
+//                    std::cin >> n;
+//
+//                    if (!std::cin.fail() && n > 0) break;
+//
+//                    std::cout << "Loi: So luong sach phai la so nguyen duong! Vui long nhap lai.\n";
+//                    std::cin.clear();
+//                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+//                }
+//
+//                for (int i = 0; i < n; i++) {
+//                    std::cout << "\n===== NHAP THONG TIN SACH THU " << (bookList.size() + 1) << " =====" << std::endl;
+//                    book newBook;
+//                    newBook.inputBook();
+//                    bookList.push_back(newBook);
+//                }
+//
+//                saveBooksToFile(bookList, filename);
+//                std::cout << "Da luu danh sach sach vao file!" << std::endl;
+//                break;
+            
+            while (true) {
+        std::cout << "Nhap so luong sach can them: ";
+        std::cin >> n;
 
+        if (std::cin.fail() || n <= 0) {  // Ki?m tra l?i nh?p
+            std::cout << "Loi: So luong sach phai la so nguyen duong! Vui long nhap lai.\n";
+            std::cin.clear();  // Xóa l?i nh?p
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
+            break;  
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        std::cout << "\n===== NHAP THONG TIN SACH THU " << (bookList.size() + 1) << " =====" << std::endl;
+        book newBook;
+        newBook.inputBook();
+        bookList.push_back(newBook);
+    }
+
+    saveBooksToFile(bookList, filename);
+    std::cout << "Da luu danh sach sach vao file!" << std::endl;
+    break;
+//                while (true) {
+//                    std::cout << "Nhap so luong sach can them: ";
+//                    std::cin >> n;
+//
+//                    if (!std::cin.fail() && n > 0) break; // N?u nh?p dúng, thoát vòng l?p
+//
+//                    std::cout << "Loi: So luong sach phai la so nguyen duong! Vui long nhap lai.\n";
+//                    std::cin.clear();
+//                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+//                }
+//
+//                for (int i = 0; i < n; i++) {
+//                    std::cout << "\n===== NHAP THONG TIN SACH THU " << (bookList.size() + 1) << " =====" << std::endl;
+//                    book newBook;
+//                    newBook.inputBook();
+//                    bookList.push_back(newBook);
+//                }
+//
+//                saveBooksToFile(bookList, filename);
+//                std::cout << "Da luu danh sach sach vao file!" << std::endl;
+//                break;
+            
             case 2:
                 displayBooks(bookList);
                 break;
-
             case 3:
-                searchBooks(bookList);  
+                searchBooks(bookList);
                 break;
-
             case 0:
-                cout << "Tam biet!" << endl;
+                std::cout << "Tam biet!" << std::endl;
                 break;
-
             default:
-                cout << "Lua chon khong hop le!" << endl;
+                std::cout << "Lua chon khong hop le!" << std::endl;
         }
     } while (choice != 0);
 

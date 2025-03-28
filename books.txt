@@ -1,0 +1,5 @@
+B001,Harry Potter,J.K. Rowling,Fantasy,15.99,100,50
+B002,The Hobbit,J.R.R. Tolkien,Fantasy,12.5,80,30
+B003,To Kill a Mockingbird,Harper Lee,Classic,10.99,60,20
+B004,1984,George Orwell,Dystopian,14.99,90,40
+B005,The Great Gatsby,F. Scott Fitzgerald,Classic,9.99,50,25

@@ -1,142 +1,102 @@
 #include "book.h"
-#include <cctype>   // Cho hàm isalnum()
-#include <limits>   // Cho numeric_limits
+#include <iostream>
+#include <cctype>
+#include <limits> // Ð? dùng numeric_limits
+book::book() : price(0), amount(0), sold(0) {}
 
-book::book() {
-    ID = "unknown";  
-    name = "unknown";  
-    author = "unknown";  
-    genre = "unknown";  
-    price = 0;
-    amount = 0;
-    sold = 0;
-}
-
-// Constructor co tham so
-book::book(std::string bookID, std::string bookName, std::string bookAuthor, 
-     std::string bookGenre, int bookPrice, int bookAmount, int bookSold) {  
-    ID = bookID;
-    name = bookName;
-    author = bookAuthor;
-    genre = bookGenre;  
-    price = bookPrice;
-    amount = bookAmount;
-    sold = bookSold;
-}
-
-
-void book::setID(std::string bookID) {
-    ID = bookID;
-}
-
-std::string book::getID() {
-    return ID;
-}
-
-void book::setName(std::string bookName) {
-    name = bookName;
-}
-
-std::string book::getName() {
-    return name;
-}
-
-void book::setAuthor(std::string bookAuthor) {
-    author = bookAuthor;
-}
-
-std::string book::getAuthor() {
-    return author;
-}
-
-void book::setGenre(std::string bookGenre) {  
-    genre = bookGenre;  
-}
-
-std::string book::getGenre() {  
-    return genre;  
-}
-
-void book::setPrice(int bookPrice) {
-    price = bookPrice;
-}
-
-int book::getPrice() {
-    return price;
-}
-
-void book::setAmount(int bookAmount) {
-    amount = bookAmount;
-}
-
-int book::getAmount() {
-    return amount;
-}
-
-void book::setSold(int bookSold) {
-    sold = bookSold;
-}
-
-int book::getSold() {
-    return sold;
-}
 void book::inputBook() {
-    std::string tempID;
-    bool validID = false;
+    bool isValid;
 
-    while (!validID) {
-        std::cout << "Nhap ma sach: ";
-        std::cin >> tempID;
-        
-        
-        bool isValid = true;
-        for (size_t i = 0; i < tempID.length(); ++i) {
-            if (!isalnum(tempID[i])) {
-			//std::isalnum() de kiem tra ky tu chi la chu hoac so
+    // Ki?m tra ID sách
+    do {
+        std::cout << "Nhap ID sach (chi chua chu va so, khong co ky tu dac biet): ";
+        std::cin >> ID;
+
+        isValid = true;
+        for (size_t i = 0; i < ID.length(); i++) {
+            if (!isalnum(ID[i])) {
                 isValid = false;
                 break;
             }
         }
 
-        if (isValid) {
-            ID = tempID;
-            validID = true;
-        } else {
-            std::cout << "Ma sach chi duoc chua chu va so. Vui long nhap lai!" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (!isValid) {
+            std::cout << "Loi: ID chi duoc chua chu cai va so! Vui long nhap lai.\n";
         }
-    }
+    } while (!isValid);
 
-    std::cin.ignore(); 
-    
+    std::cin.ignore();  // Xóa b? nh? d?m sau khi nh?p ID
     std::cout << "Nhap ten sach: ";
     std::getline(std::cin, name);
-    
-    std::cout << "Nhap tac gia: ";
+    std::cout << "Nhap ten tac gia: ";
     std::getline(std::cin, author);
-    
-    std::cout << "Nhap the loai: ";
+    std::cout << "Nhap the loai sach: ";
     std::getline(std::cin, genre);
-    
-    std::cout << "Nhap gia sach: ";
-    std::cin >> price;
-    
-    std::cout << "Nhap so luong: ";
-    std::cin >> amount;
-    
-    std::cout << "Nhap so luong da ban: ";
-    std::cin >> sold;
+
+    // Ki?m tra nh?p s? h?p l? cho giá ti?n
+    do {
+        std::cout << "Nhap gia tien: ";
+        std::cin >> price;
+
+        if (std::cin.fail() || price < 0) {
+            std::cout << "Loi: Gia tien phai la so hop le! Vui long nhap lai.\n";
+            std::cin.clear(); // Xóa l?i cin
+            std::cin.ignore(10000, '\n'); // Xóa b? nh? d?m
+        }
+    } while (std::cin.fail() || price < 0);
+
+    // Ki?m tra nh?p s? h?p l? cho s? lu?ng sách
+    do {
+        std::cout << "Nhap so luong sach: ";
+        std::cin >> amount;
+
+        if (std::cin.fail() || amount < 0) {
+            std::cout << "Loi: So luong sach phai la so nguyen duong! Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+        }
+    } while (std::cin.fail() || amount < 0);
+
+    // Ki?m tra nh?p s? h?p l? cho s? lu?ng dã bán
+    do {
+        std::cout << "Nhap so luong da ban: ";
+        std::cin >> sold;
+
+        if (std::cin.fail() || sold < 0 || sold > amount) {
+            std::cout << "Loi: So luong da ban phai la so nguyen duong va <= so luong sach! Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+        }
+    } while (std::cin.fail() || sold < 0 || sold > amount);
+}
+void book::displayBook() const {
+    std::cout << "ID: " << ID << "\n"
+              << "Ten: " << name << "\n"
+              << "Tac gia: " << author << "\n"
+              << "The loai: " << genre << "\n"
+              << "Gia: " << price << "\n"
+              << "So luong: " << amount << "\n"
+              << "Da ban: " << sold << "\n";
 }
 
-// Ham hien thi thong tin sach
-void book::displayBook() const{
-    std::cout << "Ma sach: " << ID << std::endl;
-    std::cout << "Ten sach: " << name << std::endl;
-    std::cout << "Tac gia: " << author << std::endl;
-    std::cout << "The loai: " << genre << std::endl;  // Doi tu "gerne" thanh "genre"
-    std::cout << "Gia sach: " << price << " dong" << std::endl;
-    std::cout << "So luong: " << amount << std::endl;
-    std::cout << "Da ban: " << sold << std::endl;
+std::string book::getID() const { return ID; }
+std::string book::getName() const { return name; }
+std::string book::getAuthor() const { return author; }
+std::string book::getGenre() const { return genre; }
+double book::getPrice() const { return price; }
+int book::getAmount() const { return amount; }
+int book::getSold() const { return sold; }
+
+void book::loadFromFile(std::istream& in) {
+    std::getline(in, ID, ',');
+    std::getline(in, name, ',');
+    std::getline(in, author, ',');
+    std::getline(in, genre, ',');
+    in >> price;
+    in.ignore();
+    in >> amount;
+    in.ignore();
+    in >> sold;
+    in.ignore();
 }
 

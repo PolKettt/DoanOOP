@@ -1,9 +1,8 @@
 #ifndef BOOK_H
 #define BOOK_H
-#include <cctype>   // Cho hàm isalnum()
-#include <limits>   // Cho numeric_limits
-#include <string>
+
 #include <iostream>
+#include <string>
 
 class book {
 private:
@@ -11,38 +10,23 @@ private:
     std::string name;
     std::string author;
     std::string genre;
-    int price;
+    double price;
     int amount;
     int sold;
 
 public:
-  
-    book();  
-    book(std::string bookID, std::string bookName, std::string bookAuthor, 
-         std::string bookGenre, int bookPrice, int bookAmount, int bookSold);
-
-   
-    std::string getID();
-    std::string getName();
-    std::string getAuthor();
-    std::string getGenre();
-    int getPrice();
-    int getAmount();
-    int getSold();
-
-    
-    void setID(std::string bookID);
-    void setName(std::string bookName);
-    void setAuthor(std::string bookAuthor);
-    void setGenre(std::string bookGenre);
-    void setPrice(int bookPrice);
-    void setAmount(int bookAmount);
-    void setSold(int bookSold);
-
-   
+    book();
     void inputBook();
     void displayBook() const;
+    std::string getID() const;
+    std::string getName() const;
+    std::string getAuthor() const;
+    std::string getGenre() const;
+    double getPrice() const;
+    int getAmount() const;
+    int getSold() const;
+    void loadFromFile(std::istream& in);
 };
 
-#endif // BOOK_H
+#endif
 
