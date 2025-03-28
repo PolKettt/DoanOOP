@@ -2,32 +2,39 @@
 #include <fstream>
 #include <iostream>
 
-void loadBooksFromFile(std::vector<book>& books, const char* filename) {
+void loadBooksFromFile(std::vector<book> &books, const char *filename)
+{
     std::ifstream file(filename);
-    if (!file) {
+    if (!file)
+    {
         std::cerr << "Khong the mo file " << filename << std::endl;
         return;
     }
 
     books.clear();
     book temp;
-    while (!file.eof()) {
+    while (!file.eof())
+    {
         temp.loadFromFile(file);
-        if (temp.getID().empty()) continue;
+        if (temp.getID().empty())
+            continue;
         books.push_back(temp);
     }
 
     file.close();
 }
 
-void saveBooksToFile(const std::vector<book>& books, const char* filename) {
+void saveBooksToFile(const std::vector<book> &books, const char *filename)
+{
     std::ofstream file(filename);
-    if (!file) {
+    if (!file)
+    {
         std::cerr << "Khong the ghi vao file " << filename << std::endl;
         return;
     }
 
-    for (size_t i = 0; i < books.size(); i++) {
+    for (size_t i = 0; i < books.size(); i++)
+    {
         file << books[i].getID() << ","
              << books[i].getName() << ","
              << books[i].getAuthor() << ","
@@ -40,39 +47,97 @@ void saveBooksToFile(const std::vector<book>& books, const char* filename) {
     file.close();
 }
 
-void displayBooks(const std::vector<book>& books) {
-    if (books.empty()) {
+void displayBooks(const std::vector<book> &books)
+{
+    if (books.empty())
+    {
         std::cout << "Danh sach sach rong!\n";
         return;
     }
 
-    for (size_t i = 0; i < books.size(); i++) {
+    for (size_t i = 0; i < books.size(); i++)
+    {
         std::cout << "\n===== Sach thu " << (i + 1) << " =====\n";
         books[i].displayBook();
     }
 }
+bool deleteBook(std::vector<book> &bookList, const std::string &id)
+{
+    for (size_t i = 0; i < bookList.size(); i++)
+    {
+        if (bookList[i].getID() == id)
+        {
+            bookList.erase(bookList.begin() + i);
+            std::cout << "Da xoa sach co ID: " << id << std::endl;
+            return true;
+        }
+    }
+    std::cout << "Khong tim thay sach co ID: " << id << std::endl;
+    return false;
+}
+bool editBook(std::vector<book> &bookList, const std::string &id)
+{
+    for (size_t i = 0; i < bookList.size(); i++)
+    {
+        if (bookList[i].getID() == id)
+        {
+            std::cout << "Nhap thong tin moi cho sach (ID se giu nguyen):\n";
+            bookList[i].inputBook();
+            std::cout << "Da cap nhat sach co ID: " << id << std::endl;
+            return true;
+        }
+    }
+    std::cout << "Khong tim thay sach co ID: " << id << std::endl;
+    return false;
+}
+void exportBooksToFile(const std::vector<book> &bookList, const char *filename)
+{
+    std::ofstream file(filename);
+    if (!file)
+    {
+        std::cerr << "Khong the ghi vao file " << filename << std::endl;
+        return;
+    }
 
-//void searchBooks(const std::vector<book>& books) {
-//    std::string keyword;
-//    std::cout << "Nhap ten sach can tim: ";
-//    std::cin.ignore();
-//    std::getline(std::cin, keyword);
+    for (size_t i = 0; i < bookList.size(); i++)
+    {
+        file << "Sach thu " << (i + 1) << ":\n";
+        file << "ID: " << bookList[i].getID() << "\n";
+        file << "Ten: " << bookList[i].getName() << "\n";
+        file << "Tac gia: " << bookList[i].getAuthor() << "\n";
+        file << "The loai: " << bookList[i].getGenre() << "\n";
+        file << "Gia: " << bookList[i].getPrice() << "\n";
+        file << "So luong: " << bookList[i].getAmount() << "\n";
+        file << "Da ban: " << bookList[i].getSold() << "\n\n";
+    }
+
+    file.close();
+    std::cout << "Da xuat danh sach sach vao file: " << filename << std::endl;
+}
+
+// void searchBooks(const std::vector<book>& books) {
+//     std::string keyword;
+//     std::cout << "Nhap ten sach can tim: ";
+//     std::cin.ignore();
+//     std::getline(std::cin, keyword);
 //
-//    bool found = false;
-//    for (size_t i = 0; i < books.size(); i++) {
-//        if (books[i].getName().find(keyword) != std::string::npos) {
-//            std::cout << "\n===== Tim thay sach =====\n";
-//            books[i].displayBook();
-//            found = true;
-//        }
-//    }
+//     bool found = false;
+//     for (size_t i = 0; i < books.size(); i++) {
+//         if (books[i].getName().find(keyword) != std::string::npos) {
+//             std::cout << "\n===== Tim thay sach =====\n";
+//             books[i].displayBook();
+//             found = true;
+//         }
+//     }
 //
-//    if (!found) {
-//        std::cout << "Khong tim thay sach voi tu khoa: " << keyword << "\n";
-//    }
-//}
-void searchBooks(const std::vector<book>& bookList) {
-    if (bookList.empty()) {
+//     if (!found) {
+//         std::cout << "Khong tim thay sach voi tu khoa: " << keyword << "\n";
+//     }
+// }
+void searchBooks(const std::vector<book> &bookList)
+{
+    if (bookList.empty())
+    {
         std::cout << "Danh sach sach hien dang trong!" << std::endl;
         return;
     }
@@ -86,71 +151,84 @@ void searchBooks(const std::vector<book>& bookList) {
     std::cout << "Nhap lua chon: ";
     std::cin >> searchChoice;
 
-    std::cin.ignore();  
+    std::cin.ignore();
 
     bool found = false;
 
-    switch (searchChoice) {
-        case 1: { // Tìm theo ID
-            std::string searchID;
-            std::cout << "Nhap ID sach can tim: ";
-            std::cin >> searchID;
+    switch (searchChoice)
+    {
+    case 1:
+    { // Tï¿½m theo ID
+        std::string searchID;
+        std::cout << "Nhap ID sach can tim: ";
+        std::cin >> searchID;
 
-            for (size_t i = 0; i < bookList.size(); i++) {
-                if (bookList[i].getID() == searchID) {
-                    bookList[i].displayBook();
-                    found = true;
-                    break; // ID là duy nh?t nên có th? d?ng ngay
-                }
+        for (size_t i = 0; i < bookList.size(); i++)
+        {
+            if (bookList[i].getID() == searchID)
+            {
+                bookList[i].displayBook();
+                found = true;
+                break; // ID lï¿½ duy nh?t nï¿½n cï¿½ th? d?ng ngay
             }
-            break;
         }
-        case 2: { // Tìm theo tên
-            std::string searchName;
-            std::cout << "Nhap ten sach can tim: ";
-            std::getline(std::cin, searchName);
+        break;
+    }
+    case 2:
+    { // Tï¿½m theo tï¿½n
+        std::string searchName;
+        std::cout << "Nhap ten sach can tim: ";
+        std::getline(std::cin, searchName);
 
-            for (size_t i = 0; i < bookList.size(); i++) {
-                if (bookList[i].getName() == searchName) {
-                    bookList[i].displayBook();
-                    found = true;
-                }
+        for (size_t i = 0; i < bookList.size(); i++)
+        {
+            if (bookList[i].getName() == searchName)
+            {
+                bookList[i].displayBook();
+                found = true;
             }
-            break;
         }
-        case 3: { // Tìm theo tác gi?
-            std::string searchAuthor;
-            std::cout << "Nhap ten tac gia can tim: ";
-            std::getline(std::cin, searchAuthor);
+        break;
+    }
+    case 3:
+    { // Tï¿½m theo tï¿½c gi?
+        std::string searchAuthor;
+        std::cout << "Nhap ten tac gia can tim: ";
+        std::getline(std::cin, searchAuthor);
 
-            for (size_t i = 0; i < bookList.size(); i++) {
-                if (bookList[i].getAuthor() == searchAuthor) {
-                    bookList[i].displayBook();
-                    found = true;
-                }
+        for (size_t i = 0; i < bookList.size(); i++)
+        {
+            if (bookList[i].getAuthor() == searchAuthor)
+            {
+                bookList[i].displayBook();
+                found = true;
             }
-            break;
         }
-        case 4: { // Tìm theo kho?ng giá
-            double minPrice, maxPrice;
-            std::cout << "Nhap khoang gia (min max): ";
-            std::cin >> minPrice >> maxPrice;
+        break;
+    }
+    case 4:
+    { // Tï¿½m theo kho?ng giï¿½
+        double minPrice, maxPrice;
+        std::cout << "Nhap khoang gia (min max): ";
+        std::cin >> minPrice >> maxPrice;
 
-            for (size_t i = 0; i < bookList.size(); i++) {
-                if (bookList[i].getPrice() >= minPrice && bookList[i].getPrice() <= maxPrice) {
-                    bookList[i].displayBook();
-                    found = true;
-                }
+        for (size_t i = 0; i < bookList.size(); i++)
+        {
+            if (bookList[i].getPrice() >= minPrice && bookList[i].getPrice() <= maxPrice)
+            {
+                bookList[i].displayBook();
+                found = true;
             }
-            break;
         }
-        default:
-            std::cout << "Lua chon khong hop le!" << std::endl;
-            return;
+        break;
+    }
+    default:
+        std::cout << "Lua chon khong hop le!" << std::endl;
+        return;
     }
 
-    if (!found) {
+    if (!found)
+    {
         std::cout << "Khong tim thay sach theo tieu chi da chon!" << std::endl;
     }
 }
-
